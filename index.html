@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="index.css">
+
+  <script src="https://www.amcharts.com/lib/4/core.js"></script>
+  <script src="https://www.amcharts.com/lib/4/maps.js"></script>
+  <script src="https://www.amcharts.com/lib/4/geodata/worldLow.js"></script>
+
+</head>
+<body>
+  <header>
+
+<div class="header">
+  <div id="chartdiv"></div>
+  <div id="info"></div>
+</div>
+
+</header>
+<main>
+
+</main>
+<footer>
+
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <script>
+
+var chart = am4core.create("chartdiv", am4maps.MapChart);
+
+chart.geodata = am4geodata_worldLow;
+
+chart.projection = new am4maps.projections.Miller();
+
+var polygonSeries = chart.series.push(new am4maps.MapPolygonSeries());
+
+polygonSeries.useGeodata = true;
+
+polygonSeries.data = [{
+  "id": "US",
+  "color": am4core.color("#3F4B3B"),
+}, {
+  //  other countries
+}];
+
+var polygonTemplate = polygonSeries.mapPolygons.template;
+polygonTemplate.tooltipText = "{name}";
+polygonTemplate.fill = am4core.color("#5CAB7D");
+polygonTemplate.propertyFields.fill = "color";
+
+polygonTemplate.events.on("hit", function(ev) {
+  var data = ev.target.dataItem.dataContext;
+
+  var url = document.createElement("a");
+  url.href = "under/" + data.id + ".html";
+  url.target = "_blank"; 
+
+  url.click();
+});
+
+var hs = polygonTemplate.states.create("hover");
+hs.properties.fill = am4core.color("#003000");
+
+chart.zoomControl = new am4maps.ZoomControl();
+
+var template = am4core.Template.new();
+template.getHTML = function(feature) {
+  var url = feature.data["url"];
+  if (url) {
+    return "<a href='" + url + "'>" + feature.properties.name + "</a>";
+  } else {
+    return feature.properties.name; 
+  }
+};
+
+polygonSeries.template = template;
+
+  
+  </script>
+
+</body>
+</html>
